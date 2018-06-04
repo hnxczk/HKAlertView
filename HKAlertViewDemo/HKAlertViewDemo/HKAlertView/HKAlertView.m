@@ -21,6 +21,7 @@
 
 #import "HKAlertView.h"
 #import "HKAlertViewController.h"
+#import "HKAlertModel.h"
 
 @interface HKAlertView()
 

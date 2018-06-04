@@ -1,0 +1,16 @@
+//
+//  HKAlertModel.h
+//  HKAlertViewDemo
+//
+//  Created by 周可 on 2018/6/4.
+//  Copyright © 2018年 zhouke. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "HKGlobalHeader.h"
+
+@interface HKAlertModel : NSObject
+
+HKPropStatementAndFuncStatement(copy, HKAlertModel, NSString *, title)
+
+@end

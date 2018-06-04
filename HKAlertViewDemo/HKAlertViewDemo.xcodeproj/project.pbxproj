@@ -17,6 +17,7 @@
 		6368C80320C5263800D28052 /* HKAlertViewDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6368C80220C5263800D28052 /* HKAlertViewDemoUITests.m */; };
 		6368C81220C5269F00D28052 /* HKAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6368C81120C5269F00D28052 /* HKAlertView.m */; };
 		6368C81520C5276200D28052 /* HKAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6368C81420C5276200D28052 /* HKAlertViewController.m */; };
+		6368C81A20C52E6D00D28052 /* HKAlertModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6368C81920C52E6D00D28052 /* HKAlertModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,9 @@
 		6368C81120C5269F00D28052 /* HKAlertView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HKAlertView.m; sourceTree = "<group>"; };
 		6368C81320C5276200D28052 /* HKAlertViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKAlertViewController.h; sourceTree = "<group>"; };
 		6368C81420C5276200D28052 /* HKAlertViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HKAlertViewController.m; sourceTree = "<group>"; };
+		6368C81720C52D3900D28052 /* HKGlobalHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKGlobalHeader.h; sourceTree = "<group>"; };
+		6368C81820C52E6D00D28052 /* HKAlertModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKAlertModel.h; sourceTree = "<group>"; };
+		6368C81920C52E6D00D28052 /* HKAlertModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HKAlertModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,10 +115,7 @@
 				6368C7DF20C5263500D28052 /* AppDelegate.m */,
 				6368C7E120C5263500D28052 /* ViewController.h */,
 				6368C7E220C5263500D28052 /* ViewController.m */,
-				6368C81020C5269F00D28052 /* HKAlertView.h */,
-				6368C81120C5269F00D28052 /* HKAlertView.m */,
-				6368C81320C5276200D28052 /* HKAlertViewController.h */,
-				6368C81420C5276200D28052 /* HKAlertViewController.m */,
+				6368C81620C52D0F00D28052 /* HKAlertView */,
 				6368C7E420C5263500D28052 /* Main.storyboard */,
 				6368C7E720C5263800D28052 /* Assets.xcassets */,
 				6368C7E920C5263800D28052 /* LaunchScreen.storyboard */,
@@ -140,6 +141,20 @@
 				6368C80420C5263800D28052 /* Info.plist */,
 			);
 			path = HKAlertViewDemoUITests;
+			sourceTree = "<group>";
+		};
+		6368C81620C52D0F00D28052 /* HKAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				6368C81720C52D3900D28052 /* HKGlobalHeader.h */,
+				6368C81820C52E6D00D28052 /* HKAlertModel.h */,
+				6368C81920C52E6D00D28052 /* HKAlertModel.m */,
+				6368C81020C5269F00D28052 /* HKAlertView.h */,
+				6368C81120C5269F00D28052 /* HKAlertView.m */,
+				6368C81320C5276200D28052 /* HKAlertViewController.h */,
+				6368C81420C5276200D28052 /* HKAlertViewController.m */,
+			);
+			path = HKAlertView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -277,6 +292,7 @@
 				6368C81220C5269F00D28052 /* HKAlertView.m in Sources */,
 				6368C81520C5276200D28052 /* HKAlertViewController.m in Sources */,
 				6368C7E020C5263500D28052 /* AppDelegate.m in Sources */,
+				6368C81A20C52E6D00D28052 /* HKAlertModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
