@@ -319,7 +319,7 @@
 {
     CGSize size = CGSizeMake(k_SCREEN_WIDTH - 2 * k_MARGE - 2 * k_MESSAGE_MARGE_HORIZONTAL, MAXFLOAT);
     
-    NSStringDrawingOptions opts = NSStringDrawingUsesLineFragmentOrigin |NSStringDrawingUsesFontLeading;
+    NSStringDrawingOptions opts = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
     
     NSDictionary *attrs = @{NSFontAttributeName : [UIFont systemFontOfSize:k_MESSAGE_FONT_SIZE]};
     
