@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import "HKAlertView.h"
-#import "HKAlertModel.h"
 
 @interface ViewController ()
 
@@ -23,11 +22,9 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    HKAlertModel *model = HKObject(HKAlertModel).propertyNameSet(@"");
-
-    [[HKAlertView alertViewWithTitle:@"我是标题" message:@"我是很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的消息" cancelButtonTitle:@"取消" clicked:^(NSInteger buttonIndex) {
+    [[HKAlertView alertViewWithTitle:nil message:@"我是很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的消息" cancelButtonTitle:nil clicked:^(NSInteger buttonIndex) {
         NSLog(@"----%ld----", buttonIndex);
-    } otherButtonTitles:@"按钮1", @"按钮2", nil] show];
+    } otherButtonTitles:nil] show];
 }
 
 @end

@@ -11,8 +11,8 @@
 #define k_TOP_HEIGHT 49 // title 的高度
 #define k_BUTTON_HEIGHT 49 // 按钮的高度
 
-#define k_MESSAGE_MARGE_VERTICAL 20 // 内容的竖直边距
-#define k_MESSAGE_MARGE_HORIZONTAL 10  // 内容的水平边距
+#define k_MESSAGE_MARGE_VERTICAL 30 // 内容的竖直边距
+#define k_MESSAGE_MARGE_HORIZONTAL 30  // 内容的水平边距
 #define k_MESSAGE_FONT_SIZE 16  // 消息的字体大小
 
 #define k_SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
@@ -21,7 +21,6 @@
 
 #import "HKAlertView.h"
 #import "HKAlertViewController.h"
-#import "HKAlertModel.h"
 
 @interface HKAlertView()
 
@@ -31,6 +30,8 @@
 @property (nonatomic, copy) HKAlertViewClickedHandler clickedHandler;
 @property (nonatomic, copy) HKAlertViewShouldDismissHandler shouldDismissHandler;
 @property (nonatomic, strong) NSArray<NSString *> *otherButtonTitles;
+
+@property (nonatomic, strong) NSMutableArray<UIButton *> *allButtons;
 
 @property (nonatomic, assign) NSInteger selectedIndex;
 
@@ -116,16 +117,19 @@
                      shouldDismiss:(HKAlertViewShouldDismissHandler)shouldDismissHandler
 {
     
-    HKAlertView *alert = [[HKAlertView alloc] initWithTitle:title message:message customView:customView otherButtonTitles:otherButtonTitles];
+    HKAlertView *alert = [[HKAlertView alloc] initWithTitle:title message:message customView:customView cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles];
     
-    alert.cancelButtonTitle = cancelButtonTitle;
     alert.clickedHandler = clickedHandler;
     alert.shouldDismissHandler = shouldDismissHandler;
     
     return alert;
 }
 
-- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message customView:(UIView *)customView otherButtonTitles:(NSArray<NSString *> *)otherButtonTitles
+- (instancetype)initWithTitle:(NSString *)title
+                      message:(NSString *)message
+                   customView:(UIView *)customView
+            cancelButtonTitle:(NSString *)cancelButtonTitle
+            otherButtonTitles:(NSArray<NSString *> *)otherButtonTitles
 {
     if (self = [super init]) {
         
@@ -148,15 +152,28 @@
             [self.contentScrollView addSubview:self.messageLab];
         }
         
-        [self.centerBackView addSubview:self.bottomView];
         self.otherButtonTitles = otherButtonTitles;
         for (UIButton *btn in self.otherButtons) {
             [self.bottomView addSubview:btn];
+            [self.allButtons addObject:btn];
         }
-        [self.bottomView addSubview:self.cancleBtn];
+        if (cancelButtonTitle) {
+            [self.bottomView addSubview:self.cancleBtn];
+            [self.allButtons addObject:self.cancleBtn];
+            self.cancelButtonTitle = cancelButtonTitle;
+        }
+        
+        if (cancelButtonTitle || self.otherButtons.count) {
+            [self.centerBackView addSubview:self.bottomView];
+        }
         
     }
     return self;
+}
+
+- (void)dealloc
+{
+    NSLog(@"-------------");
 }
 
 - (void)layoutSubviews
@@ -186,22 +203,42 @@
     self.contentScrollView.frame = CGRectMake(0, titleH, centerW, (contentH > k_MAX_HEIGHT ? k_MAX_HEIGHT : contentH) + 2 * k_MESSAGE_MARGE_VERTICAL);
     self.contentScrollView.contentSize = CGSizeMake(centerW, contentH + 2 * k_MESSAGE_MARGE_VERTICAL);
     
-    NSInteger otherBtnCount = self.otherButtonTitles.count;
-    // 只有一个取消按钮
-    if (otherBtnCount == 0) {
-        self.cancleBtn.frame = CGRectMake(0, 0, centerW, k_BUTTON_HEIGHT);
-    } else if (otherBtnCount == 1) { // 有一个其他按钮
-        CGFloat btnW = centerW / 2;
-        UIButton *otherBtn = [self.otherButtons firstObject];
-        otherBtn.frame = CGRectMake(0, 0, btnW, k_BUTTON_HEIGHT);
-        self.cancleBtn.frame = CGRectMake(btnW, 0, btnW, k_BUTTON_HEIGHT);
-    } else { // 有大于两个的其他按钮
-        [self.otherButtons enumerateObjectsUsingBlock:^(UIButton * _Nonnull otherBtn, NSUInteger idx, BOOL * _Nonnull stop) {
-            otherBtn.frame = CGRectMake(0, idx * k_BUTTON_HEIGHT, centerW, k_BUTTON_HEIGHT);
-        }];
-        self.cancleBtn.frame = CGRectMake(0, otherBtnCount * k_BUTTON_HEIGHT, centerW, k_BUTTON_HEIGHT);
+
+    switch (self.allButtons.count) {
+        case 0:
+        {
+            break;
+        }
+        case 1:
+        {
+            UIButton *btn = [self.allButtons firstObject];
+            btn.frame = CGRectMake(0, 0, centerW, k_BUTTON_HEIGHT);
+            break;
+        }
+        case 2:
+        {
+            UIButton *btnLeft = [self.allButtons firstObject];
+            CGFloat btnW = centerW / 2;
+            btnLeft.frame = CGRectMake(0, 0, btnW, k_BUTTON_HEIGHT);
+
+            UIButton *btnRight = [self.allButtons lastObject];
+            btnRight.frame = CGRectMake(btnW, 0, btnW, k_BUTTON_HEIGHT);
+            break;
+        }
+        default:
+        {
+            [self.otherButtons enumerateObjectsUsingBlock:^(UIButton * _Nonnull otherBtn, NSUInteger idx, BOOL * _Nonnull stop) {
+                otherBtn.frame = CGRectMake(0, idx * k_BUTTON_HEIGHT, centerW, k_BUTTON_HEIGHT);
+            }];
+            break;
+        }
     }
-    CGFloat bottomH = CGRectGetMaxY(self.cancleBtn.frame);
+    
+    CGFloat bottomH = 0;
+    if (self.allButtons.count) {
+        UIButton *btn = [self.allButtons lastObject];
+        bottomH = CGRectGetMaxY(btn.frame);
+    }
     self.bottomView.frame = CGRectMake(0, CGRectGetMaxY(self.contentScrollView.frame), centerW, bottomH);
     
     self.centerBackView.frame = CGRectMake(0, 0, centerW, CGRectGetMaxY(self.bottomView.frame));
@@ -231,7 +268,13 @@
     
     [UIView animateWithDuration:0.25f delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.backDarkView.alpha = 0.3f;
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        if (!(self.cancelButtonTitle.length + self.otherButtonTitles.count)) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self dismiss];
+            });
+        }
+    }];
 }
 
 - (void)dismiss
@@ -285,9 +328,6 @@
                                options:opts
                             attributes:attrs
                                context:nil].size;
-    if (self.messageLab.numberOfLines != 0) {
-        textSize.height = MIN(textSize.height, [UIFont systemFontOfSize:k_MESSAGE_FONT_SIZE].lineHeight * self.messageLab.numberOfLines);
-    }
     return textSize;
 }
 
@@ -403,6 +443,14 @@
         _otherButtons = array;
     }
     return _otherButtons;
+}
+
+- (NSMutableArray<UIButton *> *)allButtons
+{
+    if (!_allButtons) {
+        _allButtons = [NSMutableArray array];
+    }
+    return _allButtons;
 }
 
 @end
