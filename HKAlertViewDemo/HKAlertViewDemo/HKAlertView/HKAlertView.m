@@ -6,14 +6,16 @@
 //  Copyright © 2018年 zhouke. All rights reserved.
 //
 
-#define k_MARGE 30  // alert 左右边距
+#define k_MARGE (k_SCREEN_WIDTH > 360 ? 60 : 30 )  // alert 左右边距
 #define k_MAX_HEIGHT 400 // 消息或者自定义视图的最大高度
 #define k_TOP_HEIGHT 49 // title 的高度
 #define k_BUTTON_HEIGHT 49 // 按钮的高度
 
 #define k_MESSAGE_MARGE_VERTICAL 30 // 内容的竖直边距
+#define k_MESSAGE_DETAIL_MARGE_VERTICAL 5 // 内容与detail的的竖直间距
 #define k_MESSAGE_MARGE_HORIZONTAL 30  // 内容的水平边距
 #define k_MESSAGE_FONT_SIZE 18  // 消息的字体大小
+#define k_MESSAGE_DETAIL_FONT_SIZE 16  // 消息的字体大小
 
 #define k_SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 
@@ -27,6 +29,9 @@
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *message;
 @property (nonatomic, copy) NSAttributedString *attributedMessage;
+@property (nonatomic, copy) NSString *messageDetail;
+@property (nonatomic, copy) NSAttributedString *attributedMessageDetail;
+
 @property (nonatomic, copy) NSString *contentImage;
 
 @property (nonatomic, copy) NSString *cancelButtonTitle;
@@ -47,6 +52,7 @@
 @property (nonatomic, strong) UIImageView *contentImageView;
 @property (nonatomic, strong) UIView *customView;
 @property (nonatomic, strong) UILabel *messageLab;
+@property (nonatomic, strong) UILabel *messageDetailLab;
 
 @property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UIButton *cancleBtn;
@@ -57,6 +63,24 @@
 @end
 
 @implementation HKAlertView
+
++ (instancetype)alertViewWithMessage:(NSString *)message
+                       messageDetail:(NSString *)messageDetail
+                        contentImage:(NSString *)contentImage
+                   cancelButtonTitle:(NSString *)cancelButtonTitle
+                    otherButtonTitle:(NSString *)otherButtonTitle
+                             clicked:(HKAlertViewClickedHandler)clickedHandler
+{
+    NSArray *otherBtnTitles = nil;
+    if (otherButtonTitle.length) {
+        otherBtnTitles = @[otherButtonTitle];
+    }
+    
+    HKAlertView *alert = [[HKAlertView alloc] initWithTitle:nil contentImage:contentImage customView:nil message:message attributedMessage:nil messageDetail:messageDetail attributedMessageDetail:nil cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherBtnTitles];
+    
+    alert.clickedHandler = clickedHandler;
+    return alert;
+}
 
 + (instancetype)alertViewWithTitle:(NSString *)title
                            message:(NSString *)message
@@ -134,7 +158,7 @@
                      shouldDismiss:(HKAlertViewShouldDismissHandler)shouldDismissHandler
 {
     
-    HKAlertView *alert = [[HKAlertView alloc] initWithTitle:title message:message customView:customView contentImage:contentImage attributedMessage:attributedMessage cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles];
+    HKAlertView *alert = [[HKAlertView alloc] initWithTitle:title contentImage:contentImage customView:customView message:message attributedMessage:attributedMessage messageDetail:nil attributedMessageDetail:nil cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles];
     
     alert.clickedHandler = clickedHandler;
     alert.shouldDismissHandler = shouldDismissHandler;
@@ -143,10 +167,12 @@
 }
 
 - (instancetype)initWithTitle:(NSString *)title
-                      message:(NSString *)message
-                   customView:(UIView *)customView
                  contentImage:(NSString *)contentImage
+                   customView:(UIView *)customView
+                      message:(NSString *)message
             attributedMessage:(NSAttributedString *)attributedMessage
+                messageDetail:(NSString *)messageDetail
+      attributedMessageDetail:(NSAttributedString *)attributedMessageDetail
             cancelButtonTitle:(NSString *)cancelButtonTitle
             otherButtonTitles:(NSArray<NSString *> *)otherButtonTitles
 {
@@ -154,7 +180,7 @@
         
         [self addSubview:self.backDarkView];
         [self addSubview:self.centerBackView];
-        self.centerBackView.layer.cornerRadius = 5.0f;
+        self.centerBackView.layer.cornerRadius = 10.0f;
         self.centerBackView.layer.masksToBounds = YES;
         
         if (title.length) {
@@ -179,6 +205,12 @@
                 self.message = message;
             }
             [self.contentScrollView addSubview:self.messageLab];
+            if (attributedMessageDetail) {
+                self.attributedMessageDetail = attributedMessageDetail;
+            } else {
+                self.messageDetail = messageDetail;
+            }
+            [self.contentScrollView addSubview:self.messageDetailLab];
         }
         
         self.otherButtonTitles = otherButtonTitles;
@@ -232,7 +264,15 @@
     } else {
         CGSize messageSize = [self messageTextSize];
         self.messageLab.frame = CGRectMake(k_MESSAGE_MARGE_HORIZONTAL, k_MESSAGE_MARGE_VERTICAL + contentH, centerW - 2 * k_MESSAGE_MARGE_HORIZONTAL, messageSize.height);
-        contentH += (messageSize.height + + k_MESSAGE_MARGE_VERTICAL);
+        if (messageSize.height) {
+            contentH += (messageSize.height + k_MESSAGE_MARGE_VERTICAL);
+        }
+        
+        CGSize messageDetailSize = [self messageDetailTextSize];
+        self.messageDetailLab.frame = CGRectMake(k_MESSAGE_MARGE_HORIZONTAL, k_MESSAGE_DETAIL_MARGE_VERTICAL + contentH, centerW - 2 * k_MESSAGE_MARGE_HORIZONTAL, messageDetailSize.height);
+        if (messageDetailSize.height) {
+            contentH += (messageDetailSize.height + k_MESSAGE_DETAIL_MARGE_VERTICAL);
+        }
     }
     
     self.contentScrollView.frame = CGRectMake(0, titleH, centerW, (contentH > k_MAX_HEIGHT ? k_MAX_HEIGHT : contentH) + k_MESSAGE_MARGE_VERTICAL);
@@ -358,12 +398,30 @@
         tempLabel.numberOfLines = 0;
         [tempLabel sizeToFit];
         return tempLabel.frame.size;
-    } else {
+    } else if (self.message) {
         CGSize size = CGSizeMake(k_SCREEN_WIDTH - 2 * k_MARGE - 2 * k_MESSAGE_MARGE_HORIZONTAL, MAXFLOAT);
         NSStringDrawingOptions opts = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
         NSDictionary *attrs = @{NSFontAttributeName : [UIFont systemFontOfSize:k_MESSAGE_FONT_SIZE]};
         return [self.message boundingRectWithSize:size options:opts attributes:attrs context:nil].size;
     }
+    return CGSizeZero;
+}
+
+- (CGSize)messageDetailTextSize
+{
+    if (self.attributedMessageDetail) {
+        UILabel *tempLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, k_SCREEN_WIDTH - 2 * k_MARGE - 2 * k_MESSAGE_MARGE_HORIZONTAL, MAXFLOAT)];
+        tempLabel.attributedText = self.attributedMessageDetail;
+        tempLabel.numberOfLines = 0;
+        [tempLabel sizeToFit];
+        return tempLabel.frame.size;
+    } else if (self.messageDetail) {
+        CGSize size = CGSizeMake(k_SCREEN_WIDTH - 2 * k_MARGE - 2 * k_MESSAGE_MARGE_HORIZONTAL, MAXFLOAT);
+        NSStringDrawingOptions opts = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
+        NSDictionary *attrs = @{NSFontAttributeName : [UIFont systemFontOfSize:k_MESSAGE_DETAIL_FONT_SIZE]};
+        return [self.messageDetail boundingRectWithSize:size options:opts attributes:attrs context:nil].size;
+    }
+    return CGSizeZero;
 }
 
 #pragma mark - setter
@@ -389,6 +447,18 @@
 {
     _attributedMessage = attributedMessage;
     self.messageLab.attributedText = attributedMessage;
+}
+
+- (void)setMessageDetail:(NSString *)messageDetail
+{
+    _messageDetail = messageDetail;
+    self.messageDetailLab.text = messageDetail;
+}
+
+- (void)setAttributedMessageDetail:(NSAttributedString *)attributedMessageDetail
+{
+    _attributedMessageDetail = attributedMessageDetail;
+    self.messageDetailLab.attributedText = attributedMessageDetail;
 }
 
 #pragma mark - getter
@@ -450,6 +520,18 @@
         _messageLab.numberOfLines = 0;
     }
     return _messageLab;
+}
+
+- (UILabel *)messageDetailLab
+{
+    if (!_messageDetailLab) {
+        _messageDetailLab = [[UILabel alloc] init];
+        _messageDetailLab.textAlignment = NSTextAlignmentCenter;
+        _messageDetailLab.font = [UIFont systemFontOfSize:k_MESSAGE_DETAIL_FONT_SIZE];
+        _messageDetailLab.textColor = ALERT_HEXA_COLOR(0x999999);
+        _messageDetailLab.numberOfLines = 0;
+    }
+    return _messageDetailLab;
 }
 
 - (UIView *)bottomView
