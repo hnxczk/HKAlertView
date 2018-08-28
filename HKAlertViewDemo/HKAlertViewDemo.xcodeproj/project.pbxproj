@@ -17,8 +17,6 @@
 		6368C80320C5263800D28052 /* HKAlertViewDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6368C80220C5263800D28052 /* HKAlertViewDemoUITests.m */; };
 		6368C81220C5269F00D28052 /* HKAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6368C81120C5269F00D28052 /* HKAlertView.m */; };
 		6368C81520C5276200D28052 /* HKAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6368C81420C5276200D28052 /* HKAlertViewController.m */; };
-		63D881122134300E005E9016 /* HKAlertContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D881112134300E005E9016 /* HKAlertContentView.m */; };
-		63D881142134361B005E9016 /* HKAlertContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63D881132134361B005E9016 /* HKAlertContentView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,9 +57,6 @@
 		6368C81120C5269F00D28052 /* HKAlertView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HKAlertView.m; sourceTree = "<group>"; };
 		6368C81320C5276200D28052 /* HKAlertViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKAlertViewController.h; sourceTree = "<group>"; };
 		6368C81420C5276200D28052 /* HKAlertViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HKAlertViewController.m; sourceTree = "<group>"; };
-		63D881102134300E005E9016 /* HKAlertContentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKAlertContentView.h; sourceTree = "<group>"; };
-		63D881112134300E005E9016 /* HKAlertContentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HKAlertContentView.m; sourceTree = "<group>"; };
-		63D881132134361B005E9016 /* HKAlertContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HKAlertContentView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,9 +144,6 @@
 			children = (
 				6368C81020C5269F00D28052 /* HKAlertView.h */,
 				6368C81120C5269F00D28052 /* HKAlertView.m */,
-				63D881102134300E005E9016 /* HKAlertContentView.h */,
-				63D881112134300E005E9016 /* HKAlertContentView.m */,
-				63D881132134361B005E9016 /* HKAlertContentView.xib */,
 				6368C81320C5276200D28052 /* HKAlertViewController.h */,
 				6368C81420C5276200D28052 /* HKAlertViewController.m */,
 			);
@@ -261,7 +253,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63D881142134361B005E9016 /* HKAlertContentView.xib in Resources */,
 				6368C7EB20C5263800D28052 /* LaunchScreen.storyboard in Resources */,
 				6368C7E820C5263800D28052 /* Assets.xcassets in Resources */,
 				6368C7E620C5263500D28052 /* Main.storyboard in Resources */,
@@ -291,7 +282,6 @@
 			files = (
 				6368C7E320C5263500D28052 /* ViewController.m in Sources */,
 				6368C7EE20C5263800D28052 /* main.m in Sources */,
-				63D881122134300E005E9016 /* HKAlertContentView.m in Sources */,
 				6368C81220C5269F00D28052 /* HKAlertView.m in Sources */,
 				6368C81520C5276200D28052 /* HKAlertViewController.m in Sources */,
 				6368C7E020C5263500D28052 /* AppDelegate.m in Sources */,
@@ -464,8 +454,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3MS487J3N7;
+				DEVELOPMENT_TEAM = 7S7X7B8PE5;
 				INFOPLIST_FILE = HKAlertViewDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -481,8 +472,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3MS487J3N7;
+				DEVELOPMENT_TEAM = 7S7X7B8PE5;
 				INFOPLIST_FILE = HKAlertViewDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

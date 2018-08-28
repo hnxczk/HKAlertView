@@ -97,6 +97,16 @@ typedef BOOL(^HKAlertViewShouldDismissHandler)(NSInteger buttonIndex);
                            clicked:(nullable HKAlertViewClickedHandler)clickedHandler
                      shouldDismiss:(nullable HKAlertViewShouldDismissHandler)shouldDismissHandler;
 
++ (instancetype)alertViewWithTitle:(NSString *)title
+                           message:(NSString *)message
+                        customView:(UIView *)customView
+                      contentImage:(NSString *)contentImage
+                 attributedMessage:(NSAttributedString *)attributedMessage
+                 cancelButtonTitle:(NSString *)cancelButtonTitle
+                 otherButtonTitles:(NSArray<NSString *> *)otherButtonTitles
+                           clicked:(HKAlertViewClickedHandler)clickedHandler
+                     shouldDismiss:(HKAlertViewShouldDismissHandler)shouldDismissHandler;
+
 - (void)show;
 - (void)dismiss;
 
