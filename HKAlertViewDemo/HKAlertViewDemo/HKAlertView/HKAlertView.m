@@ -82,6 +82,24 @@
     return alert;
 }
 
++ (instancetype)alertViewWithAttributedMessage:(NSAttributedString *)attributedMessage
+                       attributedMessageDetail:(NSAttributedString *)attributedMessageDetail
+                                  contentImage:(NSString *)contentImage
+                             cancelButtonTitle:(NSString *)cancelButtonTitle
+                              otherButtonTitle:(NSString *)otherButtonTitle
+                                       clicked:(HKAlertViewClickedHandler)clickedHandler
+{
+    NSArray *otherBtnTitles = nil;
+    if (otherButtonTitle.length) {
+        otherBtnTitles = @[otherButtonTitle];
+    }
+    
+    HKAlertView *alert = [[HKAlertView alloc] initWithTitle:nil contentImage:contentImage customView:nil message:nil attributedMessage:attributedMessage messageDetail:nil attributedMessageDetail:attributedMessageDetail cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherBtnTitles];
+    
+    alert.clickedHandler = clickedHandler;
+    return alert;
+}
+
 + (instancetype)alertViewWithTitle:(NSString *)title
                            message:(NSString *)message
                  cancelButtonTitle:(NSString *)cancelButtonTitle

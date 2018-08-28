@@ -19,6 +19,13 @@ typedef BOOL(^HKAlertViewShouldDismissHandler)(NSInteger buttonIndex);
                    cancelButtonTitle:(NSString *)cancelButtonTitle
                     otherButtonTitle:(NSString *)otherButtonTitle
                              clicked:(HKAlertViewClickedHandler)clickedHandler;
+
++ (instancetype)alertViewWithAttributedMessage:(NSString *)attributedMessage
+                       attributedMessageDetail:(NSString *)attributedMessageDetail
+                                  contentImage:(NSString *)contentImage
+                             cancelButtonTitle:(NSString *)cancelButtonTitle
+                              otherButtonTitle:(NSString *)otherButtonTitle
+                                       clicked:(HKAlertViewClickedHandler)clickedHandler;
 /**
  便捷构造一个或者没有其他按钮的方法
  
